@@ -1,0 +1,312 @@
+import React, { useState } from 'react';
+import { ChevronLeft, ChevronRight, Clock, Target, Rocket, Users, Lightbulb, ClipboardCheck, RotateCcw, PencilLine } from 'lucide-react';
+
+const phases = [
+  {
+    id: 1,
+    title: "1. Introduce & Identify Friction",
+    time: "10:00 – 10:20",
+    icon: <Users className="w-6 h-6" />,
+    task: "Identify your daily friction",
+    content: (
+      <div className="space-y-6">
+        <div className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-xl border-l-4 border-blue-500">
+          <h4 className="font-bold mb-3 uppercase text-sm tracking-widest text-blue-700 dark:text-blue-400">Your Action:</h4>
+          <ul className="space-y-4 text-lg font-medium">
+            <li className="flex gap-3">
+              <span className="text-blue-500 font-black">01.</span>
+              <span>Introduce yourself: Name, work, and one non-work interest.</span>
+            </li>
+            <li className="flex gap-3">
+              <span className="text-blue-500 font-black">02.</span>
+              <span>State one specific daily friction point you encounter.</span>
+            </li>
+            <li className="flex gap-3">
+              <span className="text-blue-500 font-black">03.</span>
+              <span>Write your friction point on a sticky note and place it on the shared board.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    )
+  },
+  {
+    id: 2,
+    title: "2. Brainwrite Your Ideas",
+    time: "10:20 – 10:50",
+    icon: <Lightbulb className="w-6 h-6" />,
+    task: "5-5-5 Sprint",
+    content: (
+      <div className="space-y-6">
+        <div className="grid grid-cols-1 gap-4">
+          <div className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-900/40 rounded-xl border dark:border-slate-700">
+            <div className="bg-blue-600 text-white w-12 h-12 rounded-lg flex items-center justify-center font-black flex-shrink-0 shadow-lg">5m</div>
+            <p className="text-base"><strong>Solo:</strong> List 5+ problems you personally face right now.</p>
+          </div>
+          <div className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-900/40 rounded-xl border dark:border-slate-700">
+            <div className="bg-purple-600 text-white w-12 h-12 rounded-lg flex items-center justify-center font-black flex-shrink-0 shadow-lg">5m</div>
+            <p className="text-base"><strong>Collaborate:</strong> Pass your list to a neighbor. Add 2 ideas to the list you just received.</p>
+          </div>
+          <div className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-900/40 rounded-xl border dark:border-slate-700">
+            <div className="bg-green-600 text-white w-12 h-12 rounded-lg flex items-center justify-center font-black flex-shrink-0 shadow-lg">5m</div>
+            <p className="text-base"><strong>Review:</strong> Take your list back. Circle the top 2 ideas that excite you most.</p>
+          </div>
+        </div>
+        
+        <div className="mt-8 p-6 bg-amber-50 dark:bg-amber-900/10 rounded-2xl border-2 border-dashed border-amber-200 dark:border-amber-800">
+          <h4 className="font-black mb-4 uppercase text-xs tracking-widest text-amber-700 dark:text-amber-500">Think About:</h4>
+          <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm font-bold italic text-slate-600 dark:text-slate-400">
+            <li>• What task do you repeat weekly?</li>
+            <li>• What tool frustrates you daily?</li>
+            <li>• What information do you manually transfer?</li>
+            <li>• What is now possible with AI?</li>
+          </ul>
+        </div>
+      </div>
+    )
+  },
+  {
+    id: 3,
+    title: "3. Define Your Project",
+    time: "10:50 – 11:10",
+    icon: <Target className="w-6 h-6" />,
+    task: "Pitch & Select",
+    content: (
+      <div className="space-y-6">
+        <div className="p-4 bg-slate-900 text-white rounded-xl text-center">
+          <p className="font-bold">Pitch your top 2 ideas to a partner (2 min each). Get a gut reaction.</p>
+        </div>
+
+        <div className="space-y-4">
+          <h4 className="font-black text-sm uppercase tracking-widest text-slate-500">Your Definition:</h4>
+          <div className="bg-white dark:bg-slate-900 p-8 rounded-2xl border-2 border-blue-500 shadow-xl font-mono space-y-4 text-lg">
+            <div><span className="text-blue-500 font-bold">WHO:</span> [Name one specific user]</div>
+            <div><span className="text-blue-500 font-bold">WHAT:</span> [Describe the friction point]</div>
+            <div><span className="text-blue-500 font-bold">WIN:</span> [What changes if solved?]</div>
+            <div><span className="text-blue-500 font-bold">FORM:</span> [Web/Chatbot/Game/Image/Voice]</div>
+          </div>
+        </div>
+      </div>
+    )
+  },
+  {
+    id: 4,
+    title: "4. Build One Thing Badly",
+    time: "11:10 – 12:00",
+    icon: <Rocket className="w-6 h-6" />,
+    task: "Prototyping Sprints",
+    content: (
+      <div className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="p-4 border-2 rounded-xl dark:border-slate-700 bg-slate-50 dark:bg-slate-900/40">
+            <h4 className="font-black text-xs mb-3 text-slate-500 uppercase">Step 1: Setup (5 min)</h4>
+            <p className="text-sm font-bold">Choose Canvas/Artifacts or Advanced tools. Focus on the single "monkey" function that does the core work.</p>
+          </div>
+          <div className="p-4 border-2 border-orange-200 dark:border-orange-800 rounded-xl bg-orange-50 dark:bg-orange-900/10">
+            <h4 className="font-black text-xs mb-3 text-orange-600 uppercase">Step 2: Build (40 min)</h4>
+            <div className="text-xs space-y-2 font-bold">
+              <p>• 15m: Skeleton (In → Process → Out)</p>
+              <p>• 15m: Make it barely functional</p>
+              <p>• 10m: Fix one embarrassing bug</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-slate-100 dark:bg-slate-800 p-6 rounded-xl font-mono text-sm border-l-4 border-orange-500">
+          <h4 className="font-bold mb-2 uppercase text-xs text-slate-500">AI Prompt Logic:</h4>
+          <p>INPUT: What goes in?</p>
+          <p>OUTPUT: What comes out?</p>
+          <p>PROCESS: How does AI transform it?</p>
+          <p>EXAMPLE: Use one real test case</p>
+        </div>
+
+        <div className="p-4 bg-red-50 dark:bg-red-900/20 border-2 border-red-100 dark:border-red-900 rounded-xl text-center">
+          <p className="font-black text-red-600 dark:text-red-400">🚨 11:30 CHECKPOINT</p>
+          <p className="text-sm font-bold">Show your ugly prototype to a neighbor. Does the core function work?</p>
+        </div>
+      </div>
+    )
+  },
+  {
+    id: 5,
+    title: "5. Fresh Eyes Swap",
+    time: "12:00 – 12:20",
+    icon: <ClipboardCheck className="w-6 h-6" />,
+    task: "Blind User Testing",
+    content: (
+      <div className="space-y-4">
+        <div className="bg-indigo-600 text-white p-6 rounded-2xl shadow-lg">
+          <h4 className="font-black text-xs mb-4 uppercase tracking-widest opacity-80">Testing Protocol:</h4>
+          <ul className="space-y-4 text-lg">
+            <li className="flex gap-4">
+              <div className="bg-white/20 w-8 h-8 rounded flex items-center justify-center font-bold">1</div>
+              <span><strong>Swap seats:</strong> Pair with someone who hasn't seen your build.</span>
+            </li>
+            <li className="flex gap-4">
+              <div className="bg-white/20 w-8 h-8 rounded flex items-center justify-center font-bold">2</div>
+              <span><strong>Observe (3m):</strong> Watch them use it cold. <strong>Do not explain.</strong></span>
+            </li>
+            <li className="flex gap-4">
+              <div className="bg-white/20 w-8 h-8 rounded flex items-center justify-center font-bold">3</div>
+              <span><strong>Listen (2m):</strong> Note one confusion and one success.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    )
+  },
+  {
+    id: 6,
+    title: "6. Evaluate: Pivot, Kill, Continue",
+    time: "12:20 – 12:35",
+    icon: <RotateCcw className="w-6 h-6" />,
+    task: "Decision Time",
+    content: (
+      <div className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {['Did anyone use it successfully?', 'What surprised you?', 'Is it worth more effort?'].map((q, i) => (
+            <div key={i} className="p-4 bg-white dark:bg-slate-900 border rounded-xl shadow-sm text-center">
+              <p className="font-bold text-sm">{q}</p>
+            </div>
+          ))}
+        </div>
+        <div className="p-8 bg-slate-900 text-white rounded-2xl text-center">
+          <h4 className="text-2xl font-black mb-2 italic">Choose your path.</h4>
+          <p className="text-slate-400">Prepare to share your "Pivot, Kill, or Continue" decision with the group.</p>
+        </div>
+      </div>
+    )
+  },
+  {
+    id: 7,
+    title: "7. Lock in Your Launch",
+    time: "12:35 – 1:00",
+    icon: <Rocket className="w-6 h-6" />,
+    task: "Action Commitment",
+    content: (
+      <div className="space-y-8">
+        <div className="bg-indigo-50 dark:bg-indigo-900/20 p-8 rounded-2xl border-2 border-indigo-500 shadow-xl">
+          <h4 className="font-black text-indigo-600 dark:text-indigo-400 mb-6 uppercase tracking-tighter text-3xl">YOUR LAUNCH PLAN:</h4>
+          <div className="space-y-6">
+            <div className="border-b border-indigo-200 dark:border-indigo-800 pb-2">
+              <span className="text-[10px] font-black uppercase text-indigo-400">01. FORMAT</span>
+              <p className="text-xl font-bold italic text-slate-800 dark:text-slate-200">How will you share? (Video, post, email, WhatsApp)</p>
+            </div>
+            <div className="border-b border-indigo-200 dark:border-indigo-800 pb-2">
+              <span className="text-[10px] font-black uppercase text-indigo-400">02. AUDIENCE</span>
+              <p className="text-xl font-bold italic text-slate-800 dark:text-slate-200">Who specifically needs to see this?</p>
+            </div>
+            <div className="border-b border-indigo-200 dark:border-indigo-800 pb-2">
+              <span className="text-[10px] font-black uppercase text-indigo-400">03. DEADLINE</span>
+              <p className="text-xl font-bold italic text-slate-800 dark:text-slate-200">By when will you hit send?</p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="flex items-center gap-4 p-6 bg-slate-900 text-white rounded-2xl">
+          <div className="p-4 bg-green-500 rounded-full animate-pulse">
+            <PencilLine className="w-6 h-6 text-white" />
+          </div>
+          <p className="font-bold text-lg">FINAL ROUND: State your one sharing action to the group.</p>
+        </div>
+      </div>
+    )
+  }
+];
+
+export default function App() {
+  const [currentPhase, setCurrentPhase] = useState(0);
+
+  const nextPhase = () => {
+    if (currentPhase < phases.length - 1) setCurrentPhase(currentPhase + 1);
+  };
+
+  const prevPhase = () => {
+    if (currentPhase > 0) setCurrentPhase(currentPhase - 1);
+  };
+
+  const progress = ((currentPhase + 1) / phases.length) * 100;
+
+  return (
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans p-4 md:p-8 selection:bg-blue-500 selection:text-white">
+      <div className="max-w-4xl mx-auto flex flex-col h-[90vh] bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+        
+        {/* Progress Bar Top */}
+        <div className="w-full h-2 bg-slate-100 dark:bg-slate-800 flex">
+          {phases.map((_, i) => (
+            <div 
+              key={i} 
+              className={`h-full flex-1 transition-all duration-500 ${
+                i <= currentPhase ? 'bg-blue-500' : 'bg-transparent'
+              } ${i === currentPhase ? 'animate-pulse' : ''}`}
+            />
+          ))}
+        </div>
+
+        {/* Header */}
+        <header className="px-8 pt-8 pb-4 bg-white dark:bg-slate-900">
+          <div className="flex justify-between items-start mb-4">
+            <div>
+              <div className="flex items-center gap-2 mb-1 text-blue-500">
+                {phases[currentPhase].icon}
+                <span className="text-[10px] font-black uppercase tracking-[0.2em]">Workshop Task {currentPhase + 1} of {phases.length}</span>
+              </div>
+              <h1 className="text-3xl md:text-5xl font-black tracking-tight text-slate-900 dark:text-white uppercase leading-none">
+                {phases[currentPhase].title}
+              </h1>
+            </div>
+            <div className="hidden sm:flex flex-col items-end">
+              <div className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 rounded-xl font-black text-xs">
+                <Clock className="w-3 h-3 text-blue-500" />
+                <span>{phases[currentPhase].time}</span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* Content Area */}
+        <main className="flex-1 overflow-y-auto px-8 md:px-12 py-6 scroll-smooth">
+          <div className="animate-in fade-in slide-in-from-bottom-8 duration-700">
+            <div className="mb-8 p-3 bg-blue-50 dark:bg-blue-900/10 rounded-xl inline-flex items-center gap-2 border border-blue-100 dark:border-blue-800">
+              <span className="w-2 h-2 bg-blue-500 rounded-full animate-ping" />
+              <span className="text-xs font-black uppercase text-blue-700 dark:text-blue-400">Mission: {phases[currentPhase].task}</span>
+            </div>
+            
+            <div className="max-w-none">
+              {phases[currentPhase].content}
+            </div>
+          </div>
+        </main>
+
+        {/* Navigation Footer */}
+        <footer className="p-6 md:px-10 bg-slate-50 dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-4">
+          <button
+            onClick={prevPhase}
+            disabled={currentPhase === 0}
+            className={`flex items-center gap-2 px-6 py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all ${
+              currentPhase === 0 
+                ? 'opacity-0 pointer-events-none' 
+                : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:scale-105 active:scale-95'
+            }`}
+          >
+            <ChevronLeft className="w-4 h-4" />
+            Previous
+          </button>
+          
+          <button
+            onClick={nextPhase}
+            disabled={currentPhase === phases.length - 1}
+            className={`flex items-center gap-3 px-10 py-5 rounded-2xl font-black uppercase text-xs tracking-widest transition-all shadow-xl active:scale-95 ${
+              currentPhase === phases.length - 1
+                ? 'bg-green-500 text-white cursor-default shadow-green-200 dark:shadow-none'
+                : 'bg-blue-600 text-white hover:bg-blue-700 hover:scale-105 shadow-blue-200 dark:shadow-none'
+            }`}
+          >
+            {currentPhase === phases.length - 1 ? 'Workshop Complete' : 'Next Task'}
+            {currentPhase !== phases.length - 1 && <ChevronRight className="w-4 h-4" />}
+          </button>
+        </footer>
+      </div>
+    </div>
+  );
+}
