@@ -1,312 +1,641 @@
-import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, Clock, Target, Rocket, Users, Lightbulb, ClipboardCheck, RotateCcw, PencilLine } from 'lucide-react';
+<!DOCTYPE html>
+<html lang="en">
 
-const phases = [
-  {
-    id: 1,
-    title: "1. Introduce & Identify Friction",
-    time: "10:00 – 10:20",
-    icon: <Users className="w-6 h-6" />,
-    task: "Identify your daily friction",
-    content: (
-      <div className="space-y-6">
-        <div className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-xl border-l-4 border-blue-500">
-          <h4 className="font-bold mb-3 uppercase text-sm tracking-widest text-blue-700 dark:text-blue-400">Your Action:</h4>
-          <ul className="space-y-4 text-lg font-medium">
-            <li className="flex gap-3">
-              <span className="text-blue-500 font-black">01.</span>
-              <span>Introduce yourself: Name, work, and one non-work interest.</span>
-            </li>
-            <li className="flex gap-3">
-              <span className="text-blue-500 font-black">02.</span>
-              <span>State one specific daily friction point you encounter.</span>
-            </li>
-            <li className="flex gap-3">
-              <span className="text-blue-500 font-black">03.</span>
-              <span>Write your friction point on a sticky note and place it on the shared board.</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-    )
-  },
-  {
-    id: 2,
-    title: "2. Brainwrite Your Ideas",
-    time: "10:20 – 10:50",
-    icon: <Lightbulb className="w-6 h-6" />,
-    task: "5-5-5 Sprint",
-    content: (
-      <div className="space-y-6">
-        <div className="grid grid-cols-1 gap-4">
-          <div className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-900/40 rounded-xl border dark:border-slate-700">
-            <div className="bg-blue-600 text-white w-12 h-12 rounded-lg flex items-center justify-center font-black flex-shrink-0 shadow-lg">5m</div>
-            <p className="text-base"><strong>Solo:</strong> List 5+ problems you personally face right now.</p>
-          </div>
-          <div className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-900/40 rounded-xl border dark:border-slate-700">
-            <div className="bg-purple-600 text-white w-12 h-12 rounded-lg flex items-center justify-center font-black flex-shrink-0 shadow-lg">5m</div>
-            <p className="text-base"><strong>Collaborate:</strong> Pass your list to a neighbor. Add 2 ideas to the list you just received.</p>
-          </div>
-          <div className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-900/40 rounded-xl border dark:border-slate-700">
-            <div className="bg-green-600 text-white w-12 h-12 rounded-lg flex items-center justify-center font-black flex-shrink-0 shadow-lg">5m</div>
-            <p className="text-base"><strong>Review:</strong> Take your list back. Circle the top 2 ideas that excite you most.</p>
-          </div>
-        </div>
-        
-        <div className="mt-8 p-6 bg-amber-50 dark:bg-amber-900/10 rounded-2xl border-2 border-dashed border-amber-200 dark:border-amber-800">
-          <h4 className="font-black mb-4 uppercase text-xs tracking-widest text-amber-700 dark:text-amber-500">Think About:</h4>
-          <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm font-bold italic text-slate-600 dark:text-slate-400">
-            <li>• What task do you repeat weekly?</li>
-            <li>• What tool frustrates you daily?</li>
-            <li>• What information do you manually transfer?</li>
-            <li>• What is now possible with AI?</li>
-          </ul>
-        </div>
-      </div>
-    )
-  },
-  {
-    id: 3,
-    title: "3. Define Your Project",
-    time: "10:50 – 11:10",
-    icon: <Target className="w-6 h-6" />,
-    task: "Pitch & Select",
-    content: (
-      <div className="space-y-6">
-        <div className="p-4 bg-slate-900 text-white rounded-xl text-center">
-          <p className="font-bold">Pitch your top 2 ideas to a partner (2 min each). Get a gut reaction.</p>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Build Workshop Guide</title>
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-tertiary: #94a3b8;
+            --border-color: #e2e8f0;
+            --accent-green: #10b981;
+            --accent-purple: #6366f1;
+            --accent-blue: #3b82f6;
+            --accent-orange: #f59e0b;
+            --accent-red: #ef4444;
+            --radius: 12px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-primary: #0f172a;
+                --bg-secondary: #1e293b;
+                --text-primary: #f8fafc;
+                --text-secondary: #cbd5e1;
+                --text-tertiary: #64748b;
+                --border-color: #334155;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        .guide {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* Progress Bar */
+        .step-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 12px;
+        }
+
+        .step-counter {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .progress-bar {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 2.5rem;
+        }
+
+        .progress-seg {
+            height: 6px;
+            border-radius: 10px;
+            flex: 1;
+            background: var(--border-color);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Phase Header */
+        .phase-dot-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        .phase-dot {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 700;
+            flex-shrink: 0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .phase-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .phase-time {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            padding: 6px 14px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Phase Card */
+        .phase-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 28px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        }
+
+        .phase-desc {
+            font-size: 19px;
+            color: var(--text-primary);
+            line-height: 1.5;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .detail-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .detail-list li {
+            font-size: 18px;
+            color: var(--text-secondary);
+            padding: 12px 0 12px 28px;
+            position: relative;
+            line-height: 1.5;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .detail-list li:last-child {
+            border-bottom: none;
+        }
+
+        .detail-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--accent-blue);
+            font-weight: bold;
+        }
+
+        .detail-list li strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .tip-box {
+            border-radius: var(--radius);
+            padding: 16px 20px;
+            margin-top: 24px;
+            font-size: 16px;
+            color: var(--text-secondary);
+            border-left: 4px solid var(--accent-green);
+            background: var(--bg-secondary);
+        }
+
+        .tip-box strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* External Guide Link */
+        .guide-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 24px;
+            padding: 16px 20px;
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: var(--radius);
+            text-decoration: none;
+            color: #0369a1;
+            transition: all 0.2s;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .guide-link {
+                background: #0c4a6e;
+                border-color: #075985;
+                color: #e0f2fe;
+            }
+        }
+
+        .guide-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .guide-link span {
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        /* Input Output visualization */
+        .input-output {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 12px;
+            align-items: stretch;
+            margin-top: 24px;
+        }
+
+        .io-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 14px;
+            font-size: 15px;
+            color: var(--text-secondary);
+        }
+
+        .io-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 6px;
+        }
+
+        .io-arrow {
+            color: var(--text-tertiary);
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Mentors */
+        .mentor-wrap {
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            background: var(--bg-primary);
+        }
+
+        .mentor-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            background: var(--bg-secondary);
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s;
+        }
+
+        .mentor-header:hover {
+            background: var(--border-color);
+        }
+
+        .mentor-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .mentor-name {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .mentor-toggle {
+            font-size: 14px;
+            color: var(--text-tertiary);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .mentor-toggle.open {
+            transform: rotate(180deg);
+        }
+
+        .mentor-body {
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .mentor-intro {
+            font-size: 17px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .mentor-list {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+
+        .mentor-list li {
+            font-size: 16px;
+            color: var(--text-secondary);
+            padding: 10px 0 10px 24px;
+            position: relative;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .mentor-list li::before {
+            content: "•";
+            position: absolute;
+            left: 6px;
+            color: var(--accent-purple);
+            font-weight: bold;
+        }
+
+        .mentor-quote {
+            border-left: 4px solid var(--accent-purple);
+            padding: 16px 20px;
+            font-size: 16px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-style: italic;
+            background: var(--bg-secondary);
+            border-radius: 0 var(--radius) var(--radius) 0;
+        }
+
+        .mentor-quote.blue {
+            border-left-color: var(--accent-blue);
+        }
+
+        /* Navigation */
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 2rem;
+            gap: 16px;
+        }
+
+        .nav-btn {
+            flex: 1;
+            font-size: 16px;
+            font-weight: 600;
+            padding: 14px 24px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: var(--bg-secondary);
+            border-color: var(--text-tertiary);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .nav-btn.primary {
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            border-color: var(--text-primary);
+        }
+
+        .nav-btn.primary:hover:not(:disabled) {
+            opacity: 0.9;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .phase-anim {
+            animation: slideUp 0.4s cubic-bezier(0, 0, 0.2, 1);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="guide">
+        <h1 class="sr-only">AI Build Workshop Participant Guide</h1>
+
+        <div class="step-header">
+            <div class="step-counter" id="step-counter"></div>
         </div>
 
-        <div className="space-y-4">
-          <h4 className="font-black text-sm uppercase tracking-widest text-slate-500">Your Definition:</h4>
-          <div className="bg-white dark:bg-slate-900 p-8 rounded-2xl border-2 border-blue-500 shadow-xl font-mono space-y-4 text-lg">
-            <div><span className="text-blue-500 font-bold">WHO:</span> [Name one specific user]</div>
-            <div><span className="text-blue-500 font-bold">WHAT:</span> [Describe the friction point]</div>
-            <div><span className="text-blue-500 font-bold">WIN:</span> [What changes if solved?]</div>
-            <div><span className="text-blue-500 font-bold">FORM:</span> [Web/Chatbot/Game/Image/Voice]</div>
-          </div>
-        </div>
-      </div>
-    )
-  },
-  {
-    id: 4,
-    title: "4. Build One Thing Badly",
-    time: "11:10 – 12:00",
-    icon: <Rocket className="w-6 h-6" />,
-    task: "Prototyping Sprints",
-    content: (
-      <div className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="p-4 border-2 rounded-xl dark:border-slate-700 bg-slate-50 dark:bg-slate-900/40">
-            <h4 className="font-black text-xs mb-3 text-slate-500 uppercase">Step 1: Setup (5 min)</h4>
-            <p className="text-sm font-bold">Choose Canvas/Artifacts or Advanced tools. Focus on the single "monkey" function that does the core work.</p>
-          </div>
-          <div className="p-4 border-2 border-orange-200 dark:border-orange-800 rounded-xl bg-orange-50 dark:bg-orange-900/10">
-            <h4 className="font-black text-xs mb-3 text-orange-600 uppercase">Step 2: Build (40 min)</h4>
-            <div className="text-xs space-y-2 font-bold">
-              <p>• 15m: Skeleton (In → Process → Out)</p>
-              <p>• 15m: Make it barely functional</p>
-              <p>• 10m: Fix one embarrassing bug</p>
-            </div>
-          </div>
-        </div>
+        <div class="progress-bar" id="progress-bar"></div>
 
-        <div className="bg-slate-100 dark:bg-slate-800 p-6 rounded-xl font-mono text-sm border-l-4 border-orange-500">
-          <h4 className="font-bold mb-2 uppercase text-xs text-slate-500">AI Prompt Logic:</h4>
-          <p>INPUT: What goes in?</p>
-          <p>OUTPUT: What comes out?</p>
-          <p>PROCESS: How does AI transform it?</p>
-          <p>EXAMPLE: Use one real test case</p>
-        </div>
+        <main id="phase-view"></main>
 
-        <div className="p-4 bg-red-50 dark:bg-red-900/20 border-2 border-red-100 dark:border-red-900 rounded-xl text-center">
-          <p className="font-black text-red-600 dark:text-red-400">🚨 11:30 CHECKPOINT</p>
-          <p className="text-sm font-bold">Show your ugly prototype to a neighbor. Does the core function work?</p>
-        </div>
-      </div>
-    )
-  },
-  {
-    id: 5,
-    title: "5. Fresh Eyes Swap",
-    time: "12:00 – 12:20",
-    icon: <ClipboardCheck className="w-6 h-6" />,
-    task: "Blind User Testing",
-    content: (
-      <div className="space-y-4">
-        <div className="bg-indigo-600 text-white p-6 rounded-2xl shadow-lg">
-          <h4 className="font-black text-xs mb-4 uppercase tracking-widest opacity-80">Testing Protocol:</h4>
-          <ul className="space-y-4 text-lg">
-            <li className="flex gap-4">
-              <div className="bg-white/20 w-8 h-8 rounded flex items-center justify-center font-bold">1</div>
-              <span><strong>Swap seats:</strong> Pair with someone who hasn't seen your build.</span>
-            </li>
-            <li className="flex gap-4">
-              <div className="bg-white/20 w-8 h-8 rounded flex items-center justify-center font-bold">2</div>
-              <span><strong>Observe (3m):</strong> Watch them use it cold. <strong>Do not explain.</strong></span>
-            </li>
-            <li className="flex gap-4">
-              <div className="bg-white/20 w-8 h-8 rounded flex items-center justify-center font-bold">3</div>
-              <span><strong>Listen (2m):</strong> Note one confusion and one success.</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-    )
-  },
-  {
-    id: 6,
-    title: "6. Evaluate: Pivot, Kill, Continue",
-    time: "12:20 – 12:35",
-    icon: <RotateCcw className="w-6 h-6" />,
-    task: "Decision Time",
-    content: (
-      <div className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {['Did anyone use it successfully?', 'What surprised you?', 'Is it worth more effort?'].map((q, i) => (
-            <div key={i} className="p-4 bg-white dark:bg-slate-900 border rounded-xl shadow-sm text-center">
-              <p className="font-bold text-sm">{q}</p>
-            </div>
-          ))}
-        </div>
-        <div className="p-8 bg-slate-900 text-white rounded-2xl text-center">
-          <h4 className="text-2xl font-black mb-2 italic">Choose your path.</h4>
-          <p className="text-slate-400">Prepare to share your "Pivot, Kill, or Continue" decision with the group.</p>
-        </div>
-      </div>
-    )
-  },
-  {
-    id: 7,
-    title: "7. Lock in Your Launch",
-    time: "12:35 – 1:00",
-    icon: <Rocket className="w-6 h-6" />,
-    task: "Action Commitment",
-    content: (
-      <div className="space-y-8">
-        <div className="bg-indigo-50 dark:bg-indigo-900/20 p-8 rounded-2xl border-2 border-indigo-500 shadow-xl">
-          <h4 className="font-black text-indigo-600 dark:text-indigo-400 mb-6 uppercase tracking-tighter text-3xl">YOUR LAUNCH PLAN:</h4>
-          <div className="space-y-6">
-            <div className="border-b border-indigo-200 dark:border-indigo-800 pb-2">
-              <span className="text-[10px] font-black uppercase text-indigo-400">01. FORMAT</span>
-              <p className="text-xl font-bold italic text-slate-800 dark:text-slate-200">How will you share? (Video, post, email, WhatsApp)</p>
-            </div>
-            <div className="border-b border-indigo-200 dark:border-indigo-800 pb-2">
-              <span className="text-[10px] font-black uppercase text-indigo-400">02. AUDIENCE</span>
-              <p className="text-xl font-bold italic text-slate-800 dark:text-slate-200">Who specifically needs to see this?</p>
-            </div>
-            <div className="border-b border-indigo-200 dark:border-indigo-800 pb-2">
-              <span className="text-[10px] font-black uppercase text-indigo-400">03. DEADLINE</span>
-              <p className="text-xl font-bold italic text-slate-800 dark:text-slate-200">By when will you hit send?</p>
-            </div>
-          </div>
-        </div>
-        
-        <div className="flex items-center gap-4 p-6 bg-slate-900 text-white rounded-2xl">
-          <div className="p-4 bg-green-500 rounded-full animate-pulse">
-            <PencilLine className="w-6 h-6 text-white" />
-          </div>
-          <p className="font-bold text-lg">FINAL ROUND: State your one sharing action to the group.</p>
-        </div>
-      </div>
-    )
-  }
-];
-
-export default function App() {
-  const [currentPhase, setCurrentPhase] = useState(0);
-
-  const nextPhase = () => {
-    if (currentPhase < phases.length - 1) setCurrentPhase(currentPhase + 1);
-  };
-
-  const prevPhase = () => {
-    if (currentPhase > 0) setCurrentPhase(currentPhase - 1);
-  };
-
-  const progress = ((currentPhase + 1) / phases.length) * 100;
-
-  return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans p-4 md:p-8 selection:bg-blue-500 selection:text-white">
-      <div className="max-w-4xl mx-auto flex flex-col h-[90vh] bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
-        
-        {/* Progress Bar Top */}
-        <div className="w-full h-2 bg-slate-100 dark:bg-slate-800 flex">
-          {phases.map((_, i) => (
-            <div 
-              key={i} 
-              className={`h-full flex-1 transition-all duration-500 ${
-                i <= currentPhase ? 'bg-blue-500' : 'bg-transparent'
-              } ${i === currentPhase ? 'animate-pulse' : ''}`}
-            />
-          ))}
-        </div>
-
-        {/* Header */}
-        <header className="px-8 pt-8 pb-4 bg-white dark:bg-slate-900">
-          <div className="flex justify-between items-start mb-4">
-            <div>
-              <div className="flex items-center gap-2 mb-1 text-blue-500">
-                {phases[currentPhase].icon}
-                <span className="text-[10px] font-black uppercase tracking-[0.2em]">Workshop Task {currentPhase + 1} of {phases.length}</span>
-              </div>
-              <h1 className="text-3xl md:text-5xl font-black tracking-tight text-slate-900 dark:text-white uppercase leading-none">
-                {phases[currentPhase].title}
-              </h1>
-            </div>
-            <div className="hidden sm:flex flex-col items-end">
-              <div className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 rounded-xl font-black text-xs">
-                <Clock className="w-3 h-3 text-blue-500" />
-                <span>{phases[currentPhase].time}</span>
-              </div>
-            </div>
-          </div>
-        </header>
-
-        {/* Content Area */}
-        <main className="flex-1 overflow-y-auto px-8 md:px-12 py-6 scroll-smooth">
-          <div className="animate-in fade-in slide-in-from-bottom-8 duration-700">
-            <div className="mb-8 p-3 bg-blue-50 dark:bg-blue-900/10 rounded-xl inline-flex items-center gap-2 border border-blue-100 dark:border-blue-800">
-              <span className="w-2 h-2 bg-blue-500 rounded-full animate-ping" />
-              <span className="text-xs font-black uppercase text-blue-700 dark:text-blue-400">Mission: {phases[currentPhase].task}</span>
-            </div>
-            
-            <div className="max-w-none">
-              {phases[currentPhase].content}
-            </div>
-          </div>
-        </main>
-
-        {/* Navigation Footer */}
-        <footer className="p-6 md:px-10 bg-slate-50 dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-4">
-          <button
-            onClick={prevPhase}
-            disabled={currentPhase === 0}
-            className={`flex items-center gap-2 px-6 py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all ${
-              currentPhase === 0 
-                ? 'opacity-0 pointer-events-none' 
-                : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:scale-105 active:scale-95'
-            }`}
-          >
-            <ChevronLeft className="w-4 h-4" />
-            Previous
-          </button>
-          
-          <button
-            onClick={nextPhase}
-            disabled={currentPhase === phases.length - 1}
-            className={`flex items-center gap-3 px-10 py-5 rounded-2xl font-black uppercase text-xs tracking-widest transition-all shadow-xl active:scale-95 ${
-              currentPhase === phases.length - 1
-                ? 'bg-green-500 text-white cursor-default shadow-green-200 dark:shadow-none'
-                : 'bg-blue-600 text-white hover:bg-blue-700 hover:scale-105 shadow-blue-200 dark:shadow-none'
-            }`}
-          >
-            {currentPhase === phases.length - 1 ? 'Workshop Complete' : 'Next Task'}
-            {currentPhase !== phases.length - 1 && <ChevronRight className="w-4 h-4" />}
-          </button>
-        </footer>
-      </div>
+        <nav class="nav">
+            <button class="nav-btn" id="btn-prev" onclick="navigate(-1)">← Back</button>
+            <button class="nav-btn primary" id="btn-next" onclick="navigate(1)">Next →</button>
+        </nav>
     </div>
-  );
-}
+
+    <script>
+        const phases = [
+            {
+                num: 1, title: "Introductions", time: "10:00 – 10:15",
+                dot: { bg: "#dcfce7", color: "#166534" }, seg: "#10b981",
+                desc: "Quick round — focus on the essentials:",
+                items: ["Your <strong>name</strong>", "Your <strong>work</strong> / role / background", "One <strong>non-work</strong> interest"]
+            },
+            {
+                num: 2, title: "Team formation", time: "10:15 – 10:25",
+                dot: { bg: "#e0e7ff", color: "#3730a3" }, seg: "#6366f1",
+                desc: "Find your team before we move on.",
+                items: ["Teams of <strong>3–4 people</strong>", "At least <strong>one AI builder + one newcomer</strong> per team"]
+            },
+            {
+                num: 3, title: "Idea generation", time: "10:25 – 10:40",
+                dot: { bg: "#ffedd5", color: "#9a3412" }, seg: "#f59e0b",
+                desc: "Write fast. Aim for 5–7 ideas each. Use these prompts:",
+                items: [
+                    "What has AI made <strong>possible that wasn't before</strong>?",
+                    "A <strong>personal friction</strong> or task you dread",
+                    "Any <strong>existing product</strong> that could be improved",
+                    "A <strong>repeated manual task</strong> that could be automated"
+                ],
+                tip: "Share all ideas in the common doc. Then each person picks <strong>one problem</strong> to work on.",
+                mentorNote: "jeremy"
+            },
+            {
+                num: 4, title: "Define problem + solution", time: "10:40 – 11:00",
+                dot: { bg: "#fee2e2", color: "#991b1b" }, seg: "#ef4444",
+                desc: "Get clear before you build. Answer these questions:",
+                items: [
+                    "What is the <strong>problem</strong>?",
+                    "What is the <strong>outcome</strong> when it's solved?",
+                    "<strong>Who has</strong> this problem — you or someone else?",
+                    "What will <strong>solve</strong> it?"
+                ],
+                io: true,
+                tip: "Write one real example: a concrete input + its expected output. This is your north star.",
+                mentorNote: "andrew"
+            },
+            {
+                num: 5, title: "Build prototype", time: "11:00 – 11:45",
+                dot: { bg: "#dbeafe", color: "#1e40af" }, seg: "#3b82f6",
+                desc: "Make a minimal, functional version. Done beats perfect.",
+                items: [
+                    "<strong>Quick:</strong> Gemini Canvas or Claude Artifacts",
+                    "<strong>Advanced:</strong> Your own tool of choice",
+                    "Ask teammates for help if stuck — that's what they're here for"
+                ],
+                tip: "Minimal functional > fully polished. Ship something that works, even poorly.",
+                guideLink: {
+                    text: "Gemini Canvas Guide",
+                    url: "https://aditya-kabra.github.io/proto_workshop/"
+                }
+            },
+            {
+                num: 6, title: "User test + iterate", time: "11:45 – 12:30",
+                dot: { bg: "#f0fdf4", color: "#166534" }, seg: "#22c55e",
+                desc: "Show it to someone in your group. Watch silently.",
+                items: [
+                    "You <strong>observe</strong> — no explaining, no guiding",
+                    "They say <strong>one thing that worked</strong>",
+                    "They say <strong>one thing that confused them</strong>",
+                    "Note improvements through observation"
+                ],
+                tip: "Decision point: <strong>improve it</strong> or <strong>change direction</strong>? Then repeat."
+            },
+            {
+                num: 7, title: "Demo + reflection", time: "12:30 – 1:00",
+                dot: { bg: "#f1f5f9", color: "#334155" }, seg: "#64748b",
+                desc: "Share what you built and what you learned.",
+                items: [
+                    "Did anyone use it <strong>successfully</strong>?",
+                    "What <strong>surprised</strong> you?",
+                    "Is the <strong>problem worth more effort</strong>?",
+                    "What was <strong>different</strong> about this process?"
+                ],
+                tip: "Share your work: WhatsApp group · LinkedIn post · product walkthrough video."
+            }
+        ];
+
+        const mentorState = { jeremy: false, andrew: false };
+
+        function toggleMentor(key) {
+            mentorState[key] = !mentorState[key];
+            render();
+        }
+
+        function jeremyNoteHTML() {
+            const open = mentorState.jeremy;
+            return `<div class="mentor-wrap">
+    <div class="mentor-header" onclick="toggleMentor('jeremy')">
+      <div>
+        <div class="mentor-label">Mentor note</div>
+        <div class="mentor-name">Jeremy Howard</div>
+      </div>
+      <span class="mentor-toggle${open ? ' open' : ''}">${open ? '▲' : '▼'}</span>
+    </div>
+    <div class="mentor-body" style="display:${open ? 'block' : 'none'}">
+      <p class="mentor-intro">Jeremy describes a philosophy focused on <strong>continuous forward progress</strong> and developing <strong>"taste" through volume</strong>. Don't wait for the perfect idea — find an immediate problem and solve it.</p>
+      <ul class="mentor-list">
+        <li><strong>Don't fall in love with one creation.</strong> Solving many problems quickly teaches you to tell apart small ideas from ones worth years of your life.</li>
+        <li><strong>The "done" state.</strong> Once a problem is solved, it's done — clear the mental space and move to the next one.</li>
+        <li><strong>Progress in small windows.</strong> Build in 15–20 minute chunks. Always move forward, never stuck on a blank page.</li>
+        <li><strong>Solve your own frustrations.</strong> The best ideas often start as personal annoyances that turn out to be universal pain points.</li>
+      </ul>
+      <div class="mentor-quote">"The more you practice solving problems, the more you can fix one of the biggest psychological problems that we have... which is that we fall in love with our own creations." — <strong>Jeremy Howard</strong></div>
+    </div>
+  </div>`;
+        }
+
+        function andrewNoteHTML() {
+            const open = mentorState.andrew;
+            return `<div class="mentor-wrap">
+    <div class="mentor-header" onclick="toggleMentor('andrew')">
+      <div>
+        <div class="mentor-label">Mentor note</div>
+        <div class="mentor-name">Andrew Ng</div>
+      </div>
+      <span class="mentor-toggle${open ? ' open' : ''}">${open ? '▲' : '▼'}</span>
+    </div>
+    <div class="mentor-body" style="display:${open ? 'block' : 'none'}">
+      <p class="mentor-intro">Andrew Ng defines a concrete product idea as one <strong>specified in enough detail that an engineer can immediately go build it.</strong></p>
+      <p class="mentor-intro">He contrasts this with vague ideas — like "using AI to optimise healthcare assets" — which lack the specifics for a team to execute consistently. Concreteness gives clear direction: build it, then quickly validate or falsify.</p>
+      <div class="mentor-quote blue">Ask yourself: if you handed this problem statement to an engineer right now, could they start building without asking a single clarifying question? If not, keep refining. — <strong>Andrew Ng</strong></div>
+    </div>
+  </div>`;
+        }
+
+        let current = 0;
+
+        function render() {
+            const p = phases[current];
+            const total = phases.length;
+
+            document.getElementById('step-counter').textContent = `Step ${current + 1} / ${total}`;
+
+            const bar = document.getElementById('progress-bar');
+            bar.innerHTML = phases.map((ph, i) =>
+                `<div class="progress-seg" style="background:${i <= current ? ph.seg : ''}; flex-grow:${i === current ? 2 : 1}"></div>`
+            ).join('');
+
+            let html = `<div class="phase-anim">`;
+            html += `<div class="phase-dot-row">
+    <div class="phase-dot" style="background:${p.dot.bg};color:${p.dot.color};">${p.num}</div>
+    <h2 class="phase-title">${p.title}</h2>
+  </div>`;
+            html += `<div class="phase-time">${p.time}</div>`;
+            html += `<div class="phase-card">`;
+            html += `<p class="phase-desc">${p.desc}</p>`;
+            html += `<ul class="detail-list">` + p.items.map(i => `<li>${i}</li>`).join('') + `</ul>`;
+
+            if (p.io) {
+                html += `<div class="input-output">
+      <div class="io-box"><div class="io-label">Input</div>Concrete data in</div>
+      <div class="io-arrow">→</div>
+      <div class="io-box"><div class="io-label">Output</div>Desired result out</div>
+    </div>`;
+            }
+
+            if (p.tip) html += `<div class="tip-box"><strong>Pro tip:</strong> ${p.tip}</div>`;
+
+            if (p.guideLink) {
+                html += `<a href="${p.guideLink.url}" target="_blank" class="guide-link">
+      <span>${p.guideLink.text}</span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+    </a>`;
+            }
+
+            html += `</div>`;
+
+            if (p.mentorNote === "jeremy") html += jeremyNoteHTML();
+            if (p.mentorNote === "andrew") html += andrewNoteHTML();
+            html += `</div>`;
+
+            document.getElementById('phase-view').innerHTML = html;
+
+            document.getElementById('btn-prev').disabled = current === 0;
+            const nextBtn = document.getElementById('btn-next');
+            nextBtn.textContent = current === total - 1 ? 'Finish' : 'Next →';
+        }
+
+        function navigate(dir) {
+            const next = current + dir;
+            if (next >= 0 && next < phases.length) {
+                current = next;
+                render();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        render();
+    </script>
+
+</body>
+
+</html>
